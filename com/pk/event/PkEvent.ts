@@ -27,7 +27,7 @@ module Pk
 			this.name 	= name;
 		}
 
-		add(key:string, callBack:Function, context:any)
+		add(key:string, callBack:Function, context?:any)
 		{
 			
 			var context = context || {};
@@ -57,14 +57,9 @@ module Pk
 		        var data = {
 		        	target:this.target // ho dispatch the event
 		        };
-
-		        // add args to data
-		        for(var j in args)
-		          data[j] = args[j]
-		        //
 		        
 		        // dispara sem contexto mesmo
-		        this.listeners[i].callBack(data);
+		        this.listeners[i].callBack(data, ...args);
 		        
 		      }
 		    }

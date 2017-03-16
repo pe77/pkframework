@@ -12,10 +12,6 @@ module Pk
 
 			this.pkConfig = pkConfig;
 
-			console.log('this.pkConfig:', this.pkConfig);
-
-
-
 			// add states
 			this.state.add('PkLoaderPreLoader', PkLoaderPreLoader);
 

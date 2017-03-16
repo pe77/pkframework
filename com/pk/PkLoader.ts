@@ -1,4 +1,4 @@
-/// <reference path='PkState.ts' />
+/// <reference path='state/PkState.ts' />
 
 module Pk
 {

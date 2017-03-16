@@ -33,8 +33,6 @@ module GameBase {
         {
             super();
 
-            console.log('---------- ---- config')
-
             this.loaderState = Loader;
             this.initialState = 'Main'
 

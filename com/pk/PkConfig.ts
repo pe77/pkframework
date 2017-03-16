@@ -10,7 +10,7 @@ module Pk
 		initialState:string 			= ''; // initial state after loadscreen
 
 		// loading settings
-		loaderLoadingBar:string			= 'assets/images/loading.png'; // loading bar
+		loaderLoadingBar:string			= 'assets/states/loader/images/loading-bar.png'; // loading bar
 		loaderWaitingTime:number 		= 1000; // 1 sec
 		loaderState:Pk.IPkLoader	 	= Pk.PkLoader;
 

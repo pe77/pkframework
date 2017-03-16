@@ -20,7 +20,6 @@ var Pk;
             if (pkConfig === void 0) { pkConfig = new Pk.PkConfig(); }
             var _this = _super.call(this, pkConfig.canvasSize[0], pkConfig.canvasSize[1], pkConfig.renderMode, pkConfig.canvasId) || this;
             _this.pkConfig = pkConfig;
-            console.log('this.pkConfig:', _this.pkConfig);
             // add states
             _this.state.add('PkLoaderPreLoader', PkLoaderPreLoader);
             // init loader
@@ -64,7 +63,7 @@ var Pk;
             this.renderMode = RenderMode.AUTO;
             this.initialState = ''; // initial state after loadscreen
             // loading settings
-            this.loaderLoadingBar = 'assets/images/loading.png'; // loading bar
+            this.loaderLoadingBar = 'assets/states/loader/images/loading-bar.png'; // loading bar
             this.loaderWaitingTime = 1000; // 1 sec
             this.loaderState = Pk.PkLoader;
         }
@@ -107,7 +106,6 @@ var GameBase;
         __extends(Config, _super);
         function Config() {
             var _this = _super.call(this) || this;
-            console.log('---------- ---- config');
             _this.loaderState = GameBase.Loader;
             _this.initialState = 'Main';
             return _this;
@@ -132,7 +130,7 @@ var Pk;
     }(Phaser.State));
     Pk.PkState = PkState;
 })(Pk || (Pk = {}));
-/// <reference path='PkState.ts' />
+/// <reference path='state/PkState.ts' />
 var Pk;
 (function (Pk) {
     var PkLoader = (function (_super) {
@@ -189,7 +187,7 @@ var GameBase;
     }(Pk.PkLoader));
     GameBase.Loader = Loader;
 })(GameBase || (GameBase = {}));
-/// <reference path='../../pk/PkState.ts' />
+/// <reference path='../../pk/state/PkState.ts' />
 var GameBase;
 (function (GameBase) {
     var Main = (function (_super) {
@@ -202,6 +200,23 @@ var GameBase;
         };
         Main.prototype.create = function () {
             console.log('Main create');
+            // cria um evento teste
+            var e = new Pk.PkElement(this.game);
+            var t = 5;
+            e.event.add('onTeste', function (event, d1, d2, d3) {
+                console.log('event onTeste 111', event, d1, d2, d3);
+            });
+            e.event.add('onTeste', function (event, d1, d2, d3) {
+                console.log('event onTeste 222', event, d1, d2, d3);
+            });
+            setTimeout(function () {
+                e.event.dispatch('onTeste', 1, [1], 'um');
+            }, 1000);
+            /*
+            setTimeout(()=>{
+                e.event.dispatch('onTeste', 2, [2], 'dois');
+            }, 2000);
+            */
         };
         return Main;
     }(Pk.PkState));
@@ -216,8 +231,10 @@ var Pk;
             var _this = _super.call(this, game) || this;
             _this.id = ++PkElement.id;
             _this.tweens = [];
-            _this.name = "PkElement";
+            _this.name = "PkElement-" + _this.id;
             console.log('PkElement create ID:', _this.id);
+            // inicia gerenciador de eventos
+            _this.event = new Pk.PkEvent('element-event-' + _this.id, _this);
             return _this;
         }
         PkElement.prototype.addTween = function (displayObject) {
@@ -270,19 +287,26 @@ var Pk;
                     var data = {
                         target: this.target // ho dispatch the event
                     };
-                    // add args to data
-                    for (var j in args)
-                        data[j] = args[j];
-                    //
                     // dispara sem contexto mesmo
-                    this.listeners[i].callBack(data);
+                    (_a = this.listeners[i]).callBack.apply(_a, [data].concat(args));
                 }
             }
+            var _a;
         };
         return PkEvent;
     }());
     PkEvent.id = 0;
     Pk.PkEvent = PkEvent;
+})(Pk || (Pk = {}));
+var Pk;
+(function (Pk) {
+    var PkTransition = (function () {
+        function PkTransition() {
+            console.log('PkTransition constructor');
+        }
+        return PkTransition;
+    }());
+    Pk.PkTransition = PkTransition;
 })(Pk || (Pk = {}));
 var Pk;
 (function (Pk) {

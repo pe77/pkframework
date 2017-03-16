@@ -10,13 +10,17 @@ module Pk
 
 		protected tweens:Array<Phaser.Tween> = [];
 
-		public name = "PkElement";
+		public name = "PkElement-"+ this.id;
+		public event:PkEvent;
 
 		constructor(game)
 		{
 			super(game);
 
 			console.log('PkElement create ID:', this.id);
+
+			// inicia gerenciador de eventos
+  			this.event = new PkEvent('element-event-'+this.id, this);
 		}
 
 		addTween(displayObject:any)
