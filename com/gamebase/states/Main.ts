@@ -1,39 +1,48 @@
 /// <reference path='../../pk/state/PkState.ts' />
+/// <reference path='../../pk/utils/PkUtils.ts' />
 
 module GameBase
 {
 
 	export class Main extends Pk.PkState {
 
-		init(p1, p2)
+		init(...args:any[])
 		{
-			console.log('Main init=', p1, p2);
+			console.log('Main init', args);
 		}
 
     	create()
     	{
+    		this.game.stage.backgroundColor = "#eeeeee";
+
     		console.log('Main create');
 
-    		// cria um evento teste
-    		var e = new Pk.PkElement(this.game);
+    		// create two elements
+    		var simon = new Pk.PkElement(this.game);
+    		var square = new Pk.PkElement(this.game);
 
-    		e.event.add('onTeste', (event, d1, d2, d3)=>{
-    			console.log('event onTeste 111', event, d1, d2, d3);
-    		});
-
-    		e.event.add('onTeste', (event, d1, d2, d3)=>{
-    			console.log('event onTeste 222', event, d1, d2, d3);
+    		// action event test
+    		simon.event.add('onAutoWhip', (event, param1, param2, param3)=>{
+    			console.log('onAutoWhip reach! Params:', event, param1, param2, param3);
     		});
 
     		setTimeout(()=>{
-    			e.event.dispatch('onTeste', 1, [1], 'um');
+    			simon.event.dispatch('onAutoWhip', 1, [1], 'one');
     		}, 1000);
+    		
 
-    		/*
-    		setTimeout(()=>{
-    			e.event.dispatch('onTeste', 2, [2], 'dois');
-    		}, 2000);
-    		*/
+    		// add/create sprite
+    		simon.add(this.game.add.sprite(0, 0, 'simon'));
+    		square.add(Pk.PkUtils.createSquare(this.game, 45, 45, "#ff00ff"));
+
+
+    		// add algumas layers
+    		this.addLayer('stage-back');
+    		this.addLayer('player');
+    		this.addLayer('stage-front');
+
+    		this.addToLayer('player', simon);
+    		this.addToLayer('stage-back', square);
     	}
     }
 

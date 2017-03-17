@@ -6,9 +6,9 @@ module GameBase
 
 	export class Menu extends Pk.PkState {
 
-		init()
+		init(...args:any[])
 		{
-            super.init();
+            super.init(args);
 			console.log('Menu init');
 		}
 
@@ -17,6 +17,7 @@ module GameBase
             super.create();
     		console.log('Menu create');
 
+            this.game.stage.backgroundColor = "#89aca6";
 
     		
     		setTimeout(()=>{

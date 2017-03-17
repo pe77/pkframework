@@ -8,11 +8,6 @@ module Pk
 
             public event:PkEvent = new PkEvent('PkTADefault', this);
 
-            constructor()
-            {
-                console.log('PkTransitionAnimationDefault constructor');
-            }
-
             start()
             {
                 console.log('start in...');

@@ -38,13 +38,8 @@ module Pk
 		protected endStartAnimation(e, ...args:any[])
 		{
 			// This is called when the state preload has finished and creation begins
-			// state.onCreateCallback 
-			console.log('change state:', this.game.state)
+			console.log('change to state:', this.to);
 
-			this.game.state.onCreateCallback = () =>
-			{
-				console.log('onCreateCallback');
-			}
 			this.game.state.start(this.to, this.clearWorld, this.clearCache, ...this.params);
 
 

@@ -115,115 +115,6 @@ var GameBase;
         return Config;
     }(Pk.PkConfig));
 })(GameBase || (GameBase = {}));
-var Pk;
-(function (Pk) {
-    var PkState = (function (_super) {
-        __extends(PkState, _super);
-        function PkState() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        PkState.prototype.init = function () {
-            console.log('PkState init');
-            this.transition = new Pk.PkTransition(this.game);
-        };
-        PkState.prototype.create = function () {
-            // console.log('PkState create');
-        };
-        return PkState;
-    }(Phaser.State));
-    Pk.PkState = PkState;
-})(Pk || (Pk = {}));
-/// <reference path='state/PkState.ts' />
-var Pk;
-(function (Pk) {
-    var PkLoader = (function (_super) {
-        __extends(PkLoader, _super);
-        function PkLoader() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        PkLoader.prototype.init = function () {
-        };
-        PkLoader.prototype.preload = function () {
-            this.load.setPreloadSprite(this.add.sprite(200, 250, 'pk-loading-bar'));
-        };
-        PkLoader.prototype.create = function () {
-            var _this = this;
-            setTimeout(function () {
-                // if initial state set, load
-                if (_this.game.getConfig().initialState != '')
-                    _this.game.state.start(_this.game.getConfig().initialState);
-                //
-            }, this.game.getConfig().loaderWaitingTime);
-        };
-        return PkLoader;
-    }(Pk.PkState));
-    Pk.PkLoader = PkLoader;
-})(Pk || (Pk = {}));
-/// <reference path='../pk/PkLoader.ts' />
-var GameBase;
-(function (GameBase) {
-    var Loader = (function (_super) {
-        __extends(Loader, _super);
-        function Loader() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        Loader.prototype.init = function () {
-            _super.prototype.init.call(this);
-        };
-        Loader.prototype.preload = function () {
-            _super.prototype.preload.call(this);
-            // default
-            this.load.spritesheet('simon', 'assets/default/images/player.png', 58, 96, 5);
-            // state level 1
-            this.load.image('level1-bg', 'assets/states/level1/images/bg.png');
-            this.load.audio('level1-sound', 'assets/states/level1/sounds/sound-test.mp3');
-            // state main
-            this.load.image('titlepage', 'assets/states/main/images/titlepage.jpg');
-            // state loader
-            this.load.image('loadingbar', 'assets/states/loader/images/loader.png');
-            this.load.image('logo', 'assets/states/loader/images/logo.png');
-        };
-        Loader.prototype.create = function () {
-            _super.prototype.create.call(this);
-        };
-        return Loader;
-    }(Pk.PkLoader));
-    GameBase.Loader = Loader;
-})(GameBase || (GameBase = {}));
-/// <reference path='../../pk/state/PkState.ts' />
-var GameBase;
-(function (GameBase) {
-    var Main = (function (_super) {
-        __extends(Main, _super);
-        function Main() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        Main.prototype.init = function (p1, p2) {
-            console.log('Main init=', p1, p2);
-        };
-        Main.prototype.create = function () {
-            console.log('Main create');
-            // cria um evento teste
-            var e = new Pk.PkElement(this.game);
-            e.event.add('onTeste', function (event, d1, d2, d3) {
-                console.log('event onTeste 111', event, d1, d2, d3);
-            });
-            e.event.add('onTeste', function (event, d1, d2, d3) {
-                console.log('event onTeste 222', event, d1, d2, d3);
-            });
-            setTimeout(function () {
-                e.event.dispatch('onTeste', 1, [1], 'um');
-            }, 1000);
-            /*
-            setTimeout(()=>{
-                e.event.dispatch('onTeste', 2, [2], 'dois');
-            }, 2000);
-            */
-        };
-        return Main;
-    }(Pk.PkState));
-    GameBase.Main = Main;
-})(GameBase || (GameBase = {}));
 /// <reference path='../vendor/phaser/phaser.d.ts' />
 var Pk;
 (function (Pk) {
@@ -306,11 +197,7 @@ var Pk;
                 args[_i - 1] = arguments[_i];
             }
             // This is called when the state preload has finished and creation begins
-            // state.onCreateCallback 
-            console.log('change state:', this.game.state);
-            this.game.state.onCreateCallback = function () {
-                console.log('onCreateCallback');
-            };
+            console.log('change to state:', this.to);
             (_a = this.game.state).start.apply(_a, [this.to, this.clearWorld, this.clearCache].concat(this.params));
             this.transitionAnimation.end();
             var _a;
@@ -324,31 +211,6 @@ var Pk;
         E.OnTransitionEndEnd = "OnTransitionEndEnd";
     })(E = Pk.E || (Pk.E = {}));
 })(Pk || (Pk = {}));
-/// <reference path='../../pk/state/PkState.ts' />
-/// <reference path='../../pk/state/PkTransition.ts' />
-var GameBase;
-(function (GameBase) {
-    var Menu = (function (_super) {
-        __extends(Menu, _super);
-        function Menu() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        Menu.prototype.init = function () {
-            _super.prototype.init.call(this);
-            console.log('Menu init');
-        };
-        Menu.prototype.create = function () {
-            var _this = this;
-            _super.prototype.create.call(this);
-            console.log('Menu create');
-            setTimeout(function () {
-                _this.transition.change('Main', 'foi', 77);
-            }, 1000);
-        };
-        return Menu;
-    }(Pk.PkState));
-    GameBase.Menu = Menu;
-})(GameBase || (GameBase = {}));
 /// <reference path='../vendor/phaser/phaser.d.ts' />
 var Pk;
 (function (Pk) {
@@ -379,6 +241,232 @@ var Pk;
     PkElement.id = 0;
     Pk.PkElement = PkElement;
 })(Pk || (Pk = {}));
+/// <reference path='PkTransition.ts' />
+/// <reference path='../element/PkElement.ts' />
+/// <reference path='../vendor/phaser/phaser.d.ts' />
+var Pk;
+(function (Pk) {
+    var PkState = (function (_super) {
+        __extends(PkState, _super);
+        function PkState() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.layers = [];
+            _this.addLayer = function (layerName) {
+                var exist = false;
+                // check if already exist
+                for (var i = 0; i < this.layers.length; i++) {
+                    if (this.layers[i].name == layerName) {
+                        exist = true;
+                        break;
+                    }
+                }
+                ;
+                if (!exist) {
+                    // add to layer
+                    this.layers.push({
+                        name: layerName,
+                        total: 0,
+                        group: this.game.add.group()
+                    });
+                }
+            };
+            _this.addToLayer = function (layerName, element) {
+                var exist = false;
+                // check if already exist
+                for (var i = 0; i < this.layers.length; i++) {
+                    if (this.layers[i].name == layerName) {
+                        exist = true;
+                        break;
+                    }
+                }
+                ;
+                // if dont exist, wharever
+                if (!exist)
+                    return;
+                //
+                // add element to layer
+                this.layers[i].group.add(element);
+                this.layers[i].total = this.layers[i].group.total;
+                // order layers
+                for (var i = 0; i < this.layers.length; i++)
+                    this.game.world.bringToTop(this.layers[i].group);
+                //
+            };
+            return _this;
+        }
+        PkState.prototype.init = function () {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            console.log('PkState init');
+            this.transition = new Pk.PkTransition(this.game);
+        };
+        PkState.prototype.create = function () {
+            // console.log('PkState create');
+        };
+        return PkState;
+    }(Phaser.State));
+    Pk.PkState = PkState;
+})(Pk || (Pk = {}));
+/// <reference path='state/PkState.ts' />
+var Pk;
+(function (Pk) {
+    var PkLoader = (function (_super) {
+        __extends(PkLoader, _super);
+        function PkLoader() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        PkLoader.prototype.init = function () {
+        };
+        PkLoader.prototype.preload = function () {
+            this.load.setPreloadSprite(this.add.sprite(200, 250, 'pk-loading-bar'));
+        };
+        PkLoader.prototype.create = function () {
+            var _this = this;
+            setTimeout(function () {
+                // if initial state set, load
+                if (_this.game.getConfig().initialState != '')
+                    _this.game.state.start(_this.game.getConfig().initialState);
+                //
+            }, this.game.getConfig().loaderWaitingTime);
+        };
+        return PkLoader;
+    }(Pk.PkState));
+    Pk.PkLoader = PkLoader;
+})(Pk || (Pk = {}));
+/// <reference path='../pk/PkLoader.ts' />
+var GameBase;
+(function (GameBase) {
+    var Loader = (function (_super) {
+        __extends(Loader, _super);
+        function Loader() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        Loader.prototype.init = function () {
+            _super.prototype.init.call(this);
+        };
+        Loader.prototype.preload = function () {
+            _super.prototype.preload.call(this);
+            // default
+            this.load.spritesheet('simon', 'assets/default/images/player.png', 58, 96, 5);
+            // state level 1
+            this.load.image('level1-bg', 'assets/states/level1/images/bg.png');
+            this.load.audio('level1-sound', 'assets/states/level1/sounds/sound-test.mp3');
+            // state main
+            this.load.image('titlepage', 'assets/states/main/images/titlepage.jpg');
+            // state loader
+            this.load.image('loadingbar', 'assets/states/loader/images/loader.png');
+            this.load.image('logo', 'assets/states/loader/images/logo.png');
+        };
+        Loader.prototype.create = function () {
+            _super.prototype.create.call(this);
+        };
+        return Loader;
+    }(Pk.PkLoader));
+    GameBase.Loader = Loader;
+})(GameBase || (GameBase = {}));
+/// <reference path='../vendor/phaser/phaser.d.ts' />
+var Pk;
+(function (Pk) {
+    var PkUtils = (function () {
+        function PkUtils() {
+        }
+        // check if is a empty object
+        PkUtils.isEmpty = function (obj) {
+            for (var prop in obj) {
+                if (obj.hasOwnProperty(prop))
+                    return false;
+            }
+            return true && JSON.stringify(obj) === JSON.stringify({});
+        };
+        PkUtils.createSquare = function (game, width, height, color) {
+            color = color || '#000000';
+            var bmd = game.add.bitmapData(width, height);
+            bmd.ctx.beginPath();
+            bmd.ctx.rect(0, 0, width, height);
+            bmd.ctx.fillStyle = color;
+            bmd.ctx.fill();
+            var bgUI = game.add.sprite(0, 0, bmd);
+            return bgUI;
+        };
+        return PkUtils;
+    }());
+    Pk.PkUtils = PkUtils;
+})(Pk || (Pk = {}));
+/// <reference path='../../pk/state/PkState.ts' />
+/// <reference path='../../pk/utils/PkUtils.ts' />
+var GameBase;
+(function (GameBase) {
+    var Main = (function (_super) {
+        __extends(Main, _super);
+        function Main() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        Main.prototype.init = function () {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            console.log('Main init', args);
+        };
+        Main.prototype.create = function () {
+            this.game.stage.backgroundColor = "#eeeeee";
+            console.log('Main create');
+            // create two elements
+            var simon = new Pk.PkElement(this.game);
+            var square = new Pk.PkElement(this.game);
+            // action event test
+            simon.event.add('onAutoWhip', function (event, param1, param2, param3) {
+                console.log('onAutoWhip reach! Params:', event, param1, param2, param3);
+            });
+            setTimeout(function () {
+                simon.event.dispatch('onAutoWhip', 1, [1], 'one');
+            }, 1000);
+            // add/create sprite
+            simon.add(this.game.add.sprite(0, 0, 'simon'));
+            square.add(Pk.PkUtils.createSquare(this.game, 45, 45, "#ff00ff"));
+            // add algumas layers
+            this.addLayer('stage-back');
+            this.addLayer('player');
+            this.addLayer('stage-front');
+            this.addToLayer('player', simon);
+            this.addToLayer('stage-back', square);
+        };
+        return Main;
+    }(Pk.PkState));
+    GameBase.Main = Main;
+})(GameBase || (GameBase = {}));
+/// <reference path='../../pk/state/PkState.ts' />
+/// <reference path='../../pk/state/PkTransition.ts' />
+var GameBase;
+(function (GameBase) {
+    var Menu = (function (_super) {
+        __extends(Menu, _super);
+        function Menu() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        Menu.prototype.init = function () {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            _super.prototype.init.call(this, args);
+            console.log('Menu init');
+        };
+        Menu.prototype.create = function () {
+            var _this = this;
+            _super.prototype.create.call(this);
+            console.log('Menu create');
+            this.game.stage.backgroundColor = "#89aca6";
+            setTimeout(function () {
+                _this.transition.change('Main', 'foi', 77);
+            }, 1000);
+        };
+        return Menu;
+    }(Pk.PkState));
+    GameBase.Menu = Menu;
+})(GameBase || (GameBase = {}));
 /// <reference path='../PkTransition.ts' />
 var Pk;
 (function (Pk) {
@@ -387,7 +475,6 @@ var Pk;
         var Default = (function () {
             function Default() {
                 this.event = new Pk.PkEvent('PkTADefault', this);
-                console.log('PkTransitionAnimationDefault constructor');
             }
             Default.prototype.start = function () {
                 console.log('start in...');
@@ -407,22 +494,5 @@ var Pk;
         }());
         PkTransitionAnimation.Default = Default;
     })(PkTransitionAnimation = Pk.PkTransitionAnimation || (Pk.PkTransitionAnimation = {}));
-})(Pk || (Pk = {}));
-var Pk;
-(function (Pk) {
-    var PkUtils = (function () {
-        function PkUtils() {
-        }
-        // check if is a empty object
-        PkUtils.isEmpty = function (obj) {
-            for (var prop in obj) {
-                if (obj.hasOwnProperty(prop))
-                    return false;
-            }
-            return true && JSON.stringify(obj) === JSON.stringify({});
-        };
-        return PkUtils;
-    }());
-    Pk.PkUtils = PkUtils;
 })(Pk || (Pk = {}));
 //# sourceMappingURL=app.js.map
