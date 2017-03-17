@@ -5,9 +5,9 @@ module GameBase
 
 	export class Main extends Pk.PkState {
 
-		init()
+		init(p1, p2)
 		{
-			console.log('Main init');
+			console.log('Main init=', p1, p2);
 		}
 
     	create()
@@ -17,11 +17,9 @@ module GameBase
     		// cria um evento teste
     		var e = new Pk.PkElement(this.game);
 
-    		var t = 5;
     		e.event.add('onTeste', (event, d1, d2, d3)=>{
     			console.log('event onTeste 111', event, d1, d2, d3);
     		});
-
 
     		e.event.add('onTeste', (event, d1, d2, d3)=>{
     			console.log('event onTeste 222', event, d1, d2, d3);

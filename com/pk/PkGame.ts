@@ -6,6 +6,8 @@ module Pk
 
 		protected pkConfig:PkConfig;
 
+		static game:PkGame;
+
 		constructor(pkConfig:PkConfig = new PkConfig())
 		{
 			super(pkConfig.canvasSize[0], pkConfig.canvasSize[1], pkConfig.renderMode, pkConfig.canvasId);
@@ -17,6 +19,8 @@ module Pk
 
 			// init loader
 			this.state.start('PkLoaderPreLoader');
+
+			PkGame.game = this;
 		}
 
 		public getConfig()

@@ -57,6 +57,14 @@ module Pk
 		        var data = {
 		        	target:this.target // ho dispatch the event
 		        };
+
+
+		        // se houver contexto, manda pelo contexto
+		        if(this.listeners[i].context)
+		        {
+		        	this.listeners[i].callBack.call(this.listeners[i].context, data, ...args);
+		        	return;
+		        }
 		        
 		        // dispara sem contexto mesmo
 		        this.listeners[i].callBack(data, ...args);

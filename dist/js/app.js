@@ -24,6 +24,7 @@ var Pk;
             _this.state.add('PkLoaderPreLoader', PkLoaderPreLoader);
             // init loader
             _this.state.start('PkLoaderPreLoader');
+            PkGame.game = _this;
             return _this;
         }
         PkGame.prototype.getConfig = function () {
@@ -88,6 +89,7 @@ var GameBase;
         function Game() {
             var _this = _super.call(this, new Config()) || this;
             // add default state
+            _this.state.add('Menu', GameBase.Menu);
             _this.state.add('Main', GameBase.Main);
             return _this;
             /*
@@ -107,7 +109,7 @@ var GameBase;
         function Config() {
             var _this = _super.call(this) || this;
             _this.loaderState = GameBase.Loader;
-            _this.initialState = 'Main';
+            _this.initialState = 'Menu';
             return _this;
         }
         return Config;
@@ -122,9 +124,10 @@ var Pk;
         }
         PkState.prototype.init = function () {
             console.log('PkState init');
+            this.transition = new Pk.PkTransition(this.game);
         };
         PkState.prototype.create = function () {
-            console.log('PkState create');
+            // console.log('PkState create');
         };
         return PkState;
     }(Phaser.State));
@@ -195,14 +198,13 @@ var GameBase;
         function Main() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        Main.prototype.init = function () {
-            console.log('Main init');
+        Main.prototype.init = function (p1, p2) {
+            console.log('Main init=', p1, p2);
         };
         Main.prototype.create = function () {
             console.log('Main create');
             // cria um evento teste
             var e = new Pk.PkElement(this.game);
-            var t = 5;
             e.event.add('onTeste', function (event, d1, d2, d3) {
                 console.log('event onTeste 111', event, d1, d2, d3);
             });
@@ -222,36 +224,6 @@ var GameBase;
     }(Pk.PkState));
     GameBase.Main = Main;
 })(GameBase || (GameBase = {}));
-/// <reference path='../vendor/phaser/phaser.d.ts' />
-var Pk;
-(function (Pk) {
-    var PkElement = (function (_super) {
-        __extends(PkElement, _super);
-        function PkElement(game) {
-            var _this = _super.call(this, game) || this;
-            _this.id = ++PkElement.id;
-            _this.tweens = [];
-            _this.name = "PkElement-" + _this.id;
-            console.log('PkElement create ID:', _this.id);
-            // inicia gerenciador de eventos
-            _this.event = new Pk.PkEvent('element-event-' + _this.id, _this);
-            return _this;
-        }
-        PkElement.prototype.addTween = function (displayObject) {
-            this.tweens.push(this.game.add.tween(displayObject));
-            return this.tweens[this.tweens.length - 1];
-        };
-        PkElement.prototype.destroy = function () {
-            for (var i = this.tweens.length - 1; i >= 0; i--) {
-                this.tweens[i].stop();
-            }
-            _super.prototype.destroy.call(this);
-        };
-        return PkElement;
-    }(Phaser.Group));
-    PkElement.id = 0;
-    Pk.PkElement = PkElement;
-})(Pk || (Pk = {}));
 /// <reference path='../vendor/phaser/phaser.d.ts' />
 var Pk;
 (function (Pk) {
@@ -287,26 +259,154 @@ var Pk;
                     var data = {
                         target: this.target // ho dispatch the event
                     };
+                    // se houver contexto, manda pelo contexto
+                    if (this.listeners[i].context) {
+                        (_a = this.listeners[i].callBack).call.apply(_a, [this.listeners[i].context, data].concat(args));
+                        return;
+                    }
                     // dispara sem contexto mesmo
-                    (_a = this.listeners[i]).callBack.apply(_a, [data].concat(args));
+                    (_b = this.listeners[i]).callBack.apply(_b, [data].concat(args));
                 }
             }
-            var _a;
+            var _a, _b;
         };
         return PkEvent;
     }());
     PkEvent.id = 0;
     Pk.PkEvent = PkEvent;
 })(Pk || (Pk = {}));
+/// <reference path='../event/PkEvent.ts' />
+/// <reference path='../PkGame.ts' />
+/// <reference path='PkState.ts' />
 var Pk;
 (function (Pk) {
     var PkTransition = (function () {
-        function PkTransition() {
+        function PkTransition(game) {
+            this.transitionAnimation = new Pk.PkTransitionAnimation.Default();
+            // defaults
+            this.clearWorld = true;
+            this.clearCache = false;
+            this.game = game;
             console.log('PkTransition constructor');
+            this.transitionAnimation.event.add(Pk.E.OnTransitionEndStart, this.endStartAnimation, this);
+            this.transitionAnimation.event.add(Pk.E.OnTransitionEndEnd, this.endStartAnimation, this);
         }
+        PkTransition.prototype.change = function (to) {
+            var args = [];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                args[_i - 1] = arguments[_i];
+            }
+            this.to = to;
+            this.params = args;
+            this.transitionAnimation.start();
+        };
+        PkTransition.prototype.endStartAnimation = function (e) {
+            var args = [];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                args[_i - 1] = arguments[_i];
+            }
+            // This is called when the state preload has finished and creation begins
+            // state.onCreateCallback 
+            console.log('change state:', this.game.state);
+            this.game.state.onCreateCallback = function () {
+                console.log('onCreateCallback');
+            };
+            (_a = this.game.state).start.apply(_a, [this.to, this.clearWorld, this.clearCache].concat(this.params));
+            this.transitionAnimation.end();
+            var _a;
+        };
         return PkTransition;
     }());
     Pk.PkTransition = PkTransition;
+    var E;
+    (function (E) {
+        E.OnTransitionEndStart = "OnTransitionEndStart";
+        E.OnTransitionEndEnd = "OnTransitionEndEnd";
+    })(E = Pk.E || (Pk.E = {}));
+})(Pk || (Pk = {}));
+/// <reference path='../../pk/state/PkState.ts' />
+/// <reference path='../../pk/state/PkTransition.ts' />
+var GameBase;
+(function (GameBase) {
+    var Menu = (function (_super) {
+        __extends(Menu, _super);
+        function Menu() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        Menu.prototype.init = function () {
+            _super.prototype.init.call(this);
+            console.log('Menu init');
+        };
+        Menu.prototype.create = function () {
+            var _this = this;
+            _super.prototype.create.call(this);
+            console.log('Menu create');
+            setTimeout(function () {
+                _this.transition.change('Main', 'foi', 77);
+            }, 1000);
+        };
+        return Menu;
+    }(Pk.PkState));
+    GameBase.Menu = Menu;
+})(GameBase || (GameBase = {}));
+/// <reference path='../vendor/phaser/phaser.d.ts' />
+var Pk;
+(function (Pk) {
+    var PkElement = (function (_super) {
+        __extends(PkElement, _super);
+        function PkElement(game) {
+            var _this = _super.call(this, game) || this;
+            _this.id = ++PkElement.id;
+            _this.tweens = [];
+            _this.name = "PkElement-" + _this.id;
+            console.log('PkElement create ID:', _this.id);
+            // inicia gerenciador de eventos
+            _this.event = new Pk.PkEvent('element-event-' + _this.id, _this);
+            return _this;
+        }
+        PkElement.prototype.addTween = function (displayObject) {
+            this.tweens.push(this.game.add.tween(displayObject));
+            return this.tweens[this.tweens.length - 1];
+        };
+        PkElement.prototype.destroy = function () {
+            for (var i = this.tweens.length - 1; i >= 0; i--) {
+                this.tweens[i].stop();
+            }
+            _super.prototype.destroy.call(this);
+        };
+        return PkElement;
+    }(Phaser.Group));
+    PkElement.id = 0;
+    Pk.PkElement = PkElement;
+})(Pk || (Pk = {}));
+/// <reference path='../PkTransition.ts' />
+var Pk;
+(function (Pk) {
+    var PkTransitionAnimation;
+    (function (PkTransitionAnimation) {
+        var Default = (function () {
+            function Default() {
+                this.event = new Pk.PkEvent('PkTADefault', this);
+                console.log('PkTransitionAnimationDefault constructor');
+            }
+            Default.prototype.start = function () {
+                console.log('start in...');
+                // animation
+                // ...
+                console.log('...start out');
+                this.event.dispatch(Pk.E.OnTransitionEndStart);
+            };
+            Default.prototype.end = function () {
+                console.log('end in...');
+                // animation
+                // ...
+                console.log('...end out');
+                this.event.dispatch(Pk.E.OnTransitionEndEnd);
+            };
+            return Default;
+        }());
+        PkTransitionAnimation.Default = Default;
+    })(PkTransitionAnimation = Pk.PkTransitionAnimation || (Pk.PkTransitionAnimation = {}));
 })(Pk || (Pk = {}));
 var Pk;
 (function (Pk) {

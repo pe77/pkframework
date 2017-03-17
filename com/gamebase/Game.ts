@@ -10,6 +10,7 @@ module GameBase {
 
 
             // add default state
+            this.state.add('Menu', GameBase.Menu);
             this.state.add('Main', GameBase.Main);
 
             /*
@@ -34,7 +35,7 @@ module GameBase {
             super();
 
             this.loaderState = Loader;
-            this.initialState = 'Main'
+            this.initialState = 'Menu';
 
         }
     }
