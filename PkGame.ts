@@ -4,7 +4,7 @@ module Pk
 {
 	export class PkGame extends Phaser.Game	{
 
-		protected pkConfig:PkConfig;
+		pkConfig:PkConfig;
 
 		static game:PkGame;
 
