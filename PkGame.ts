@@ -47,9 +47,7 @@ module Pk
 
 		create()
 		{
-			// console.log('this.game.getConfig().loaderState:', this.game.getConfig().loaderState);
 			// change to preloader screen*
-			// this.game.getConfig().loaderState();
 			this.game.state.start('PkLoader');
 		}
 	}

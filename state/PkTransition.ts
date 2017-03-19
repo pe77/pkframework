@@ -20,9 +20,6 @@ module Pk
 		{
 			this.game = game;
 
-			console.log('PkTransition constructor');
-
-
 			this.transitionAnimation.event.add(Pk.E.OnTransitionEndStart, this.endStartAnimation, this);
 			this.transitionAnimation.event.add(Pk.E.OnTransitionEndEnd, this.endStartAnimation, this);
 		}
@@ -35,14 +32,10 @@ module Pk
 			this.transitionAnimation.start();
 		}
 
+		// This is called when the state preload has finished and creation begins
 		protected endStartAnimation(e, ...args:any[])
 		{
-			// This is called when the state preload has finished and creation begins
-			console.log('change to state:', this.to);
-
 			this.game.state.start(this.to, this.clearWorld, this.clearCache, ...this.params);
-
-
 
 			this.transitionAnimation.end();
 

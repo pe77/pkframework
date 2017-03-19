@@ -10,25 +10,16 @@ module Pk
 
             start()
             {
-                console.log('start in...');
-
-                // animation
+                // animation here
                 // ...
-
-                console.log('...start out');
 
                 this.event.dispatch(Pk.E.OnTransitionEndStart);
             }
 
             end()
             {
-
-                console.log('end in...');
-
-                // animation
+                // animation here
                 // ...
-
-                console.log('...end out');
 
                 this.event.dispatch(Pk.E.OnTransitionEndEnd);
             }

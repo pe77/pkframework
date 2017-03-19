@@ -17,8 +17,6 @@ module Pk
 		{
 			super(game);
 
-			console.log('PkElement create ID:', this.id);
-
 			// inicia gerenciador de eventos
   			this.event = new PkEvent('element-event-'+this.id, this);
 		}
