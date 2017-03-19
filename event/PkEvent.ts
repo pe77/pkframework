@@ -3,12 +3,15 @@
 module Pk
 {
 
-	interface IPkEventListener {
-		
-		key		:string;
-		callBack	:Function;
-		context	:any;
-		
+	export module I
+	{
+		export interface EventListener {
+			
+			key		:string;
+			callBack	:Function;
+			context	:any;
+			
+		}
 	}
 
 	export class PkEvent {
@@ -18,7 +21,7 @@ module Pk
 
 		public name:string;
 
-		private listeners:Array<IPkEventListener> = [];
+		private listeners:Array<I.EventListener> = [];
 		private target	 :any;
 
 		constructor(name, target)

@@ -2,13 +2,18 @@
 
 module Pk
 {
-    export interface IPkLoader {
-        init();
-        preload();
-        create();
-    }
+    export module I
+	{
+	
+		export interface Loader {
+			
+			preload();
+			create();
+		}
 
-	export class PkLoader extends Pk.PkState implements IPkLoader{
+	}
+
+	export class PkLoader extends Pk.PkState implements Pk.I.Loader{
 
 		init()
 		{

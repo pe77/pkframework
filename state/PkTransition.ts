@@ -9,7 +9,7 @@ module Pk
     	transitionAnimation:Pk.I.TransitionAnimation = new Pk.PkTransitionAnimation.Default();
 
     	to:string;
-    	params:array<any>;
+    	params:Array<any>;
     	game:Pk.PkGame;
 
     	// defaults

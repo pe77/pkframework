@@ -20,7 +20,7 @@ module Pk
         
         transition:Pk.PkTransition;
 
-        layers:Array<LayerData> = [];
+        layers:Array<I.LayerData> = [];
 
         addLayer = function(layerName:string)
         {
