@@ -81,7 +81,6 @@ module Pk
 
 		init(...args:any[])
 		{
-			console.log('PkState init');
             this.transition = new Pk.PkTransition(this.game);
 		}
 
