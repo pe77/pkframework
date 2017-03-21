@@ -2,6 +2,8 @@
 /// <reference path='../PkGame.ts' />
 /// <reference path='PkState.ts' />
 
+/// <reference path='transitions/Default.ts' />
+
 module Pk
 {
     export class PkTransition  {
