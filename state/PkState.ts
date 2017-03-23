@@ -22,6 +22,12 @@ module Pk
 
         layers:Array<I.LayerData> = [];
 
+        getGame():Pk.PkGame
+        {
+            return <Pk.PkGame>this.game;
+        }
+
+
         addLayer = function(layerName:string)
         {
             var exist = false;
@@ -81,7 +87,7 @@ module Pk
 
 		init(...args:any[])
 		{
-            this.transition = new Pk.PkTransition(this.game);
+            this.transition = new Pk.PkTransition(PkGame.game);
 		}
 
 

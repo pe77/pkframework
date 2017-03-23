@@ -1,10 +1,11 @@
 /// <reference path='vendor/phaser/phaser.d.ts' />
+/// <reference path='state/PkState.ts' />
 
 module Pk
 {
 	export class PkGame extends Phaser.Game	{
 
-		pkConfig:PkConfig;
+		static pkConfig:PkConfig;
 
 		static game:PkGame;
 
@@ -12,7 +13,7 @@ module Pk
 		{
 			super(pkConfig.canvasSize[0], pkConfig.canvasSize[1], pkConfig.renderMode, pkConfig.canvasId);
 
-			this.pkConfig = pkConfig;
+			PkGame.pkConfig = pkConfig;
 
 			// add states
 			this.state.add('PkLoaderPreLoader', PkLoaderPreLoader);
@@ -23,26 +24,22 @@ module Pk
 			PkGame.game = this;
 		}
 
-		public getConfig()
-		{
-			return this.pkConfig;
-		}
 	}
 
 
-	class PkLoaderPreLoader extends Phaser.State {
+	class PkLoaderPreLoader extends Pk.PkState {
 		
 		init()
 		{
 			// add loader screen
-			this.game.state.add('PkLoader', this.game.getConfig().loaderState);
+			this.game.state.add('PkLoader', PkGame.pkConfig.loaderState);
 		}
 
 
 		preload()
 		{
 			// load loadingbar sprite
-			this.load.image('pk-loading-bar', this.game.getConfig().loaderLoadingBar);
+			this.load.image('pk-loading-bar', PkGame.pkConfig.loaderLoadingBar);
 		}
 
 		create()

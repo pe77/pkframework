@@ -30,11 +30,11 @@ module Pk
     		setTimeout(() => {
 
     			// if initial state set, load
-    			if(this.game.pkConfig.initialState != '')
-    				this.game.state.start(this.game.pkConfig.initialState);
+    			if(PkGame.pkConfig.initialState != '')
+    				this.game.state.start(PkGame.pkConfig.initialState);
     			//
 
-    		}, this.game.pkConfig.loaderWaitingTime);
+    		}, PkGame.pkConfig.loaderWaitingTime);
     		
     	}
     }
