@@ -1,4 +1,4 @@
-# PK Frameword
+# PK Framework
 Framework created to make life easier for game developers. 
 Entirely based on [phaser.io](http://phaser.i/o) html5/js game lib.
 
