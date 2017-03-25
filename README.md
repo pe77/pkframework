@@ -17,6 +17,7 @@ Todo List
 ---------
 - [x] Layer state code 
 - [ ] Parallax state code 
+- [ ] State transitions animation model
 - [ ] Prefab UI Elements *(alerts, talkbox, messages)*
 - [ ] External API integration *(facebook, twitter, ...)*
 - [ ] Export project for browser and mobiles
