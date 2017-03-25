@@ -21,6 +21,7 @@ Todo List
 - [ ] External API integration *(facebook, twitter, ...)*
 - [ ] Export project for browser and mobiles
 - [ ] Prod / Dev env, custom configuration
+- [ ] Easy way to make multiplayer games
 - [ ] Organize ideas here. Todo List *(hehe)*
 
 ...
