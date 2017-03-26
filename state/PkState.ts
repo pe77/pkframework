@@ -5,22 +5,21 @@
 module Pk
 {
 
-    export module I
-    {
-        export interface LayerData {
-
-            name:string;
-            total:number;
-            group:Phaser.Group;
-        }
-    }
-
-
     export class PkState extends Phaser.State {
         
         transition:Pk.PkTransition;
 
-        layers:Array<I.LayerData> = [];
+        layers:Array<PkLayer> = [];
+
+        pkGame:Pk.PkGame;
+
+        
+		init(...args:any[])
+		{
+            this.transition = new Pk.PkTransition(<Pk.PkGame>this.game);
+            this.pkGame = <Pk.PkGame>this.game;
+		}
+
 
         getGame():Pk.PkGame
         {
@@ -46,11 +45,9 @@ module Pk
             if(!exist)
             {
                 // add to layer
-                this.layers.push({
-                    name:layerName,
-                    total:0,
-                    group:this.game.add.group()
-                });    
+                var layer = new Pk.PkLayer(this.game);
+                layer.name = layerName;
+                this.layers.push(layer);    
             }
             
         }
@@ -75,20 +72,14 @@ module Pk
             //
 
             // add element to layer
-            this.layers[i].group.add(element);
-            this.layers[i].total = this.layers[i].group.total;
+            this.layers[i].add(element);
 
             // order layers
             for (var i = 0; i < this.layers.length; i++)
-                this.game.world.bringToTop(this.layers[i].group)
+                this.game.world.bringToTop(this.layers[i]);
             //
             
         }
-
-		init(...args:any[])
-		{
-            this.transition = new Pk.PkTransition(PkGame.game);
-		}
 
 
     	create()
