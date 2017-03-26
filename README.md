@@ -27,3 +27,5 @@ Todo List
 - [ ] Organize ideas here. Todo List *(hehe)*
 
 ...
+
+[Quick Start Guide](https://github.com/pe77/pkframework/wiki)
