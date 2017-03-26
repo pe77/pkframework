@@ -16,12 +16,13 @@ While I do not finish the documentation of this part, see some [examples here](h
 Todo List
 ---------
 - [x] Layer state code 
-- [ ] Parallax state code 
+- [x] Parallax state code (basic)
 - [ ] State transitions animation model
 - [ ] Prefab UI Elements *(alerts, talkbox, messages)*
 - [ ] External API integration *(facebook, twitter, ...)*
 - [ ] Export project for browser and mobiles
 - [ ] Prod / Dev env, custom configuration
+- [ ] Parallax state code (advanced)
 - [ ] Easy way to make multiplayer games
 - [ ] Organize ideas here. Todo List *(hehe)*
 
