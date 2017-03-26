@@ -8,7 +8,8 @@ module Pk
     export module I
     {
         export interface ParallaxElement {
-            element:Phaser.TileSprite|Pk.PkLayer;
+            tileElement:Phaser.TileSprite;
+            layerElement:Pk.PkLayer;
             distance:number;
         }
     }
@@ -45,7 +46,8 @@ module Pk
             //
 
             this.layers.push({
-                element:element,
+                tileElement:element instanceof Phaser.TileSprite ? <Phaser.TileSprite>element : null,
+                layerElement:element instanceof Pk.PkLayer ? <Pk.PkLayer>element : null,
                 distance:element instanceof Pk.PkLayer ? element.distance : distance
             });
         }
@@ -54,16 +56,21 @@ module Pk
         {
             for(let i in this.layers)
             {
-                // calc speed
-                if(this.layers[i].element instanceof Phaser.TileSprite)
+                // if is tile sprite element
+                if(this.layers[i].tileElement)
                 {
                     let posX = 1 / this.layers[i].distance;
                     
-                    this.layers[i].element.tilePosition.x = -this.state.game.camera.x * posX;
-                    this.layers[i].element.tilePosition.y = -this.state.game.camera.y * posX;
+                    this.layers[i].tileElement.tilePosition.x = -this.state.game.camera.x * posX;
+                    this.layers[i].tileElement.tilePosition.y = -this.state.game.camera.y * posX;
                 }
 
-
+                // if is layer
+                if(this.layers[i].layerElement)
+                {
+                // @todo
+                }
+                
             };
 
         }
