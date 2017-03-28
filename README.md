@@ -20,7 +20,7 @@ Todo List
 - [ ] State transitions animation model
 - [ ] Prefab UI Elements *(alerts, talkbox, messages)*
 - [ ] External API integration *(facebook, twitter, ...)*
-- [ ] Export project for browser and mobiles
+- [ ] Export project for browser, mobiles, win .exe
 - [ ] Prod / Dev env, custom configuration
 - [ ] Parallax state code (advanced)
 - [ ] Easy way to make multiplayer games
