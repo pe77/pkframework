@@ -19,6 +19,7 @@ Todo List
 - [x] Parallax state code (basic)
 - [ ] State transitions animation model
 - [ ] Prefab UI Elements *(alerts, talkbox, messages)*
+- [ ] Storage Data
 - [ ] External API integration *(facebook, twitter, ...)*
 - [ ] Export project for browser, mobiles, win .exe
 - [ ] Prod / Dev env, custom configuration
