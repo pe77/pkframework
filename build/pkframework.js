@@ -115,14 +115,13 @@ var Pk;
 var Pk;
 (function (Pk) {
     var PkTransition = (function () {
-        function PkTransition(game) {
+        function PkTransition(state) {
             this.transitionAnimation = new Pk.PkTransitionAnimation.Default();
             // defaults
             this.clearWorld = true;
             this.clearCache = false;
-            this.game = game;
-            this.transitionAnimation.event.add(Pk.E.OnTransitionEndStart, this.endStartAnimation, this);
-            this.transitionAnimation.event.add(Pk.E.OnTransitionEndEnd, this.endStartAnimation, this);
+            this.game = state.game;
+            this.state = state;
         }
         PkTransition.prototype.change = function (to) {
             var args = [];
@@ -131,16 +130,29 @@ var Pk;
             }
             this.to = to;
             this.params = args;
+            this.transitionAnimation.event.add(Pk.E.OnTransitionEndStart, this.endStartAnimation, this);
+            this.transitionAnimation.event.add(Pk.E.OnTransitionEndEnd, this.endStartAnimation, this);
             this.transitionAnimation.start();
         };
         // This is called when the state preload has finished and creation begins
         PkTransition.prototype.endStartAnimation = function (e) {
+            var _this = this;
             var args = [];
             for (var _i = 1; _i < arguments.length; _i++) {
                 args[_i - 1] = arguments[_i];
             }
+            this.game.state.onStateChange.addOnce(function (state) {
+                // get current state
+                var currentState = _this.game.state.getCurrentState();
+                _this.game.state.onCreateCallback = function () {
+                    // call current state create
+                    currentState.create();
+                    // play transition end
+                    _this.transitionAnimation.end();
+                };
+            });
+            // change state
             (_a = this.game.state).start.apply(_a, [this.to, this.clearWorld, this.clearCache].concat(this.params));
-            this.transitionAnimation.end();
             var _a;
         };
         return PkTransition;
@@ -203,9 +215,11 @@ var Pk;
                 ;
                 if (!exist) {
                     // add to layer
-                    var layer = new Pk.PkLayer(this.game);
-                    layer.name = layerName;
-                    this.layers.push(layer);
+                    this.layers.push({
+                        name: layerName,
+                        total: 0,
+                        group: this.game.add.group()
+                    });
                 }
             };
             _this.addToLayer = function (layerName, element) {
@@ -223,24 +237,24 @@ var Pk;
                     return;
                 //
                 // add element to layer
-                this.layers[i].add(element);
+                this.layers[i].group.add(element);
+                this.layers[i].total = this.layers[i].group.total;
                 // order layers
                 for (var i = 0; i < this.layers.length; i++)
-                    this.game.world.bringToTop(this.layers[i]);
+                    this.game.world.bringToTop(this.layers[i].group);
                 //
             };
             return _this;
         }
+        PkState.prototype.getGame = function () {
+            return this.game;
+        };
         PkState.prototype.init = function () {
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
-            this.transition = new Pk.PkTransition(this.game);
-            this.pkGame = this.game;
-        };
-        PkState.prototype.getGame = function () {
-            return this.game;
+            this.transition = new Pk.PkTransition(this);
         };
         PkState.prototype.create = function () {
             // console.log('PkState create');
@@ -315,6 +329,43 @@ var Pk;
     }(Pk.PkState));
     Pk.PkLoader = PkLoader;
 })(Pk || (Pk = {}));
+/// <reference path='../vendor/phaser/phaser.d.ts' />
+var Pk;
+(function (Pk) {
+    var PkUtils = (function () {
+        function PkUtils() {
+        }
+        // check if is a empty object
+        PkUtils.isEmpty = function (obj) {
+            for (var prop in obj) {
+                if (obj.hasOwnProperty(prop))
+                    return false;
+            }
+            return true && JSON.stringify(obj) === JSON.stringify({});
+        };
+        PkUtils.createSquare = function (game, width, height, color) {
+            color = color || '#000000';
+            var bmd = game.add.bitmapData(width, height);
+            bmd.ctx.beginPath();
+            bmd.ctx.rect(0, 0, width, height);
+            bmd.ctx.fillStyle = color;
+            bmd.ctx.fill();
+            var bgUI = game.add.sprite(0, 0, bmd);
+            return bgUI;
+        };
+        return PkUtils;
+    }());
+    Pk.PkUtils = PkUtils;
+})(Pk || (Pk = {}));
+/// <reference path='PkGame.ts' />
+/// <reference path='PkConfig.ts' />
+/// <reference path='PkLoader.ts' />
+/// <reference path='state/PkState.ts' />
+/// <reference path='state/PkTransition.ts' />
+/// <reference path='state/transitions/Default.ts' />
+/// <reference path='event/PkEvent.ts' />
+/// <reference path='element/PkElement.ts' />
+/// <reference path='utils/PkUtils.ts' /> 
 var Pk;
 (function (Pk) {
     var PkLayer = (function (_super) {
@@ -377,32 +428,4 @@ var Pk;
         return PkParallax;
     }());
     Pk.PkParallax = PkParallax;
-})(Pk || (Pk = {}));
-/// <reference path='../vendor/phaser/phaser.d.ts' />
-var Pk;
-(function (Pk) {
-    var PkUtils = (function () {
-        function PkUtils() {
-        }
-        // check if is a empty object
-        PkUtils.isEmpty = function (obj) {
-            for (var prop in obj) {
-                if (obj.hasOwnProperty(prop))
-                    return false;
-            }
-            return true && JSON.stringify(obj) === JSON.stringify({});
-        };
-        PkUtils.createSquare = function (game, width, height, color) {
-            color = color || '#000000';
-            var bmd = game.add.bitmapData(width, height);
-            bmd.ctx.beginPath();
-            bmd.ctx.rect(0, 0, width, height);
-            bmd.ctx.fillStyle = color;
-            bmd.ctx.fill();
-            var bgUI = game.add.sprite(0, 0, bmd);
-            return bgUI;
-        };
-        return PkUtils;
-    }());
-    Pk.PkUtils = PkUtils;
 })(Pk || (Pk = {}));

@@ -44,9 +44,10 @@ declare module Pk {
         to: string;
         params: Array<any>;
         game: Pk.PkGame;
+        state: Pk.PkState;
         clearWorld: boolean;
         clearCache: boolean;
-        constructor(game: Pk.PkGame);
+        constructor(state: Pk.PkState);
         change(to: string, ...args: any[]): void;
         protected endStartAnimation(e: any, ...args: any[]): void;
     }
@@ -75,14 +76,20 @@ declare module Pk {
     }
 }
 declare module Pk {
+    module I {
+        interface LayerData {
+            name: string;
+            total: number;
+            group: Phaser.Group;
+        }
+    }
     class PkState extends Phaser.State {
         transition: Pk.PkTransition;
-        layers: Array<PkLayer>;
-        pkGame: Pk.PkGame;
-        init(...args: any[]): void;
+        layers: Array<I.LayerData>;
         getGame(): Pk.PkGame;
         addLayer: (layerName: string) => void;
         addToLayer: (layerName: string, element: any) => void;
+        init(...args: any[]): void;
         create(): void;
     }
 }
@@ -107,6 +114,12 @@ declare module Pk {
     }
 }
 declare module Pk {
+    class PkUtils {
+        static isEmpty(obj: any): boolean;
+        static createSquare(game: Phaser.Game, width: number, height: number, color: any): Phaser.Sprite;
+    }
+}
+declare module Pk {
     class PkLayer extends Pk.PkElement {
         distance: number;
     }
@@ -125,11 +138,5 @@ declare module Pk {
         constructor(state: Pk.PkState);
         add(element: Phaser.TileSprite | Pk.PkLayer, distance?: number, cameraLock?: boolean): void;
         update(): void;
-    }
-}
-declare module Pk {
-    class PkUtils {
-        static isEmpty(obj: any): boolean;
-        static createSquare(game: Phaser.Game, width: number, height: number, color: any): Phaser.Sprite;
     }
 }
