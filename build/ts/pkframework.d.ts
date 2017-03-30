@@ -1,4 +1,4 @@
-/// <reference path="phaser/phaser.d.ts" />
+/// <reference path="../vendor/phaser/phaser.d.ts" />
 declare module Pk {
     class PkConfig {
         canvasSize: [number, number];
@@ -75,20 +75,14 @@ declare module Pk {
     }
 }
 declare module Pk {
-    module I {
-        interface LayerData {
-            name: string;
-            total: number;
-            group: Phaser.Group;
-        }
-    }
     class PkState extends Phaser.State {
         transition: Pk.PkTransition;
-        layers: Array<I.LayerData>;
+        layers: Array<PkLayer>;
+        pkGame: Pk.PkGame;
+        init(...args: any[]): void;
         getGame(): Pk.PkGame;
         addLayer: (layerName: string) => void;
         addToLayer: (layerName: string, element: any) => void;
-        init(...args: any[]): void;
         create(): void;
     }
 }
@@ -110,6 +104,27 @@ declare module Pk {
         init(): void;
         preload(): void;
         create(): void;
+    }
+}
+declare module Pk {
+    class PkLayer extends Pk.PkElement {
+        distance: number;
+    }
+}
+declare module Pk {
+    module I {
+        interface ParallaxElement {
+            tileElement: Phaser.TileSprite;
+            layerElement: Pk.PkLayer;
+            distance: number;
+        }
+    }
+    class PkParallax {
+        state: Pk.PkState;
+        layers: Array<Pk.I.ParallaxElement>;
+        constructor(state: Pk.PkState);
+        add(element: Phaser.TileSprite | Pk.PkLayer, distance?: number, cameraLock?: boolean): void;
+        update(): void;
     }
 }
 declare module Pk {

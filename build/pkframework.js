@@ -203,11 +203,9 @@ var Pk;
                 ;
                 if (!exist) {
                     // add to layer
-                    this.layers.push({
-                        name: layerName,
-                        total: 0,
-                        group: this.game.add.group()
-                    });
+                    var layer = new Pk.PkLayer(this.game);
+                    layer.name = layerName;
+                    this.layers.push(layer);
                 }
             };
             _this.addToLayer = function (layerName, element) {
@@ -225,24 +223,24 @@ var Pk;
                     return;
                 //
                 // add element to layer
-                this.layers[i].group.add(element);
-                this.layers[i].total = this.layers[i].group.total;
+                this.layers[i].add(element);
                 // order layers
                 for (var i = 0; i < this.layers.length; i++)
-                    this.game.world.bringToTop(this.layers[i].group);
+                    this.game.world.bringToTop(this.layers[i]);
                 //
             };
             return _this;
         }
-        PkState.prototype.getGame = function () {
-            return this.game;
-        };
         PkState.prototype.init = function () {
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
-            this.transition = new Pk.PkTransition(Pk.PkGame.game);
+            this.transition = new Pk.PkTransition(this.game);
+            this.pkGame = this.game;
+        };
+        PkState.prototype.getGame = function () {
+            return this.game;
         };
         PkState.prototype.create = function () {
             // console.log('PkState create');
@@ -316,6 +314,69 @@ var Pk;
         return PkLoader;
     }(Pk.PkState));
     Pk.PkLoader = PkLoader;
+})(Pk || (Pk = {}));
+var Pk;
+(function (Pk) {
+    var PkLayer = (function (_super) {
+        __extends(PkLayer, _super);
+        function PkLayer() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.distance = 1; // use for parallax effect
+            return _this;
+        }
+        return PkLayer;
+    }(Pk.PkElement));
+    Pk.PkLayer = PkLayer;
+})(Pk || (Pk = {}));
+/// <reference path='../event/PkEvent.ts' />
+/// <reference path='../PkGame.ts' />
+/// <reference path='PkLayer.ts' />
+var Pk;
+(function (Pk) {
+    var PkParallax = (function () {
+        function PkParallax(state) {
+            this.layers = [];
+            this.state = state;
+        }
+        PkParallax.prototype.add = function (element, distance, cameraLock) {
+            if (cameraLock === void 0) { cameraLock = true; }
+            // if using TileSprite, distance is mandatary
+            if (element instanceof Phaser.TileSprite && !distance)
+                throw new Error("If you use TileSprite for parallax, distance param is mandatory");
+            //
+            if (element instanceof Pk.PkLayer && distance)
+                element.distance = distance;
+            //
+            if (element instanceof Pk.PkLayer && distance)
+                element.distance = distance;
+            //
+            if (element instanceof Phaser.TileSprite && cameraLock)
+                element.fixedToCamera = true;
+            //
+            this.layers.push({
+                tileElement: element instanceof Phaser.TileSprite ? element : null,
+                layerElement: element instanceof Pk.PkLayer ? element : null,
+                distance: element instanceof Pk.PkLayer ? element.distance : distance
+            });
+        };
+        PkParallax.prototype.update = function () {
+            for (var i in this.layers) {
+                // if is tile sprite element
+                if (this.layers[i].tileElement) {
+                    var posX = 1 / this.layers[i].distance;
+                    this.layers[i].tileElement.tilePosition.x = -this.state.game.camera.x * posX;
+                    this.layers[i].tileElement.tilePosition.y = -this.state.game.camera.y * posX;
+                }
+                // if is layer
+                if (this.layers[i].layerElement) {
+                    // @todo
+                }
+            }
+            ;
+        };
+        return PkParallax;
+    }());
+    Pk.PkParallax = PkParallax;
 })(Pk || (Pk = {}));
 /// <reference path='../vendor/phaser/phaser.d.ts' />
 var Pk;
