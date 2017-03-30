@@ -17,7 +17,7 @@ Todo List
 ---------
 - [x] Layer state code 
 - [x] Parallax state code (basic)
-- [ ] State transitions animation model
+- [x] State transitions animation model
 - [ ] Prefab UI Elements *(alerts, talkbox, messages)*
 - [ ] Storage Data
 - [ ] External API integration *(facebook, twitter, ...)*
