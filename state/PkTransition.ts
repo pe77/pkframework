@@ -13,17 +13,16 @@ module Pk
     	to:string;
     	params:Array<any>;
     	game:Pk.PkGame;
+		state:Pk.PkState;
 
     	// defaults
     	clearWorld:boolean = true;
     	clearCache:boolean = false;
 
-		constructor(game:Pk.PkGame)
+		constructor(state:Pk.PkState)
 		{
-			this.game = game;
-
-			this.transitionAnimation.event.add(Pk.E.OnTransitionEndStart, this.endStartAnimation, this);
-			this.transitionAnimation.event.add(Pk.E.OnTransitionEndEnd, this.endStartAnimation, this);
+			this.game = state.game;
+			this.state = state;
 		}
 
 		change(to:string, ...args:any[])
@@ -31,16 +30,33 @@ module Pk
 			this.to = to;
 			this.params = args;
 
+
+			this.transitionAnimation.event.add(Pk.E.OnTransitionEndStart, this.endStartAnimation, this);
+			this.transitionAnimation.event.add(Pk.E.OnTransitionEndEnd, this.endStartAnimation, this);
+
 			this.transitionAnimation.start();
 		}
 
 		// This is called when the state preload has finished and creation begins
 		protected endStartAnimation(e, ...args:any[])
 		{
+			this.game.state.onStateChange.addOnce((state)=>{
+
+				// get current state
+				var currentState = this.game.state.getCurrentState();
+
+				
+				this.game.state.onCreateCallback    = () =>{
+					// call current state create
+					currentState.create();
+
+					// play transition end
+					this.transitionAnimation.end();
+				}
+			});
+
+			// change state
 			this.game.state.start(this.to, this.clearWorld, this.clearCache, ...this.params);
-
-			this.transitionAnimation.end();
-
 		}
     }
 

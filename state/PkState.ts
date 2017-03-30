@@ -87,15 +87,15 @@ module Pk
 
 		init(...args:any[])
 		{
-            this.transition = new Pk.PkTransition(PkGame.game);
+            this.transition = new Pk.PkTransition(this);
 		}
 
 
     	create()
     	{
     		// console.log('PkState create');
-    		
     	}
+
     }
 
 
