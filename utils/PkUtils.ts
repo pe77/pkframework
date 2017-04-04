@@ -13,20 +13,23 @@ module Pk
 		    return true && JSON.stringify(obj) === JSON.stringify({});
 		}
 
-		static createSquare(game:Phaser.Game, width:number, height:number, color:any)
+		static createSquareBitmap(game:Phaser.Game, width:number, height:number, color:string = "#000000"):Phaser.BitmapData
 		{
-		  color = color || '#000000';
-
 		  var bmd = game.add.bitmapData(width, height);
 		   
 		  bmd.ctx.beginPath();
 		  bmd.ctx.rect(0, 0, width, height);
 		  bmd.ctx.fillStyle = color;
 		  bmd.ctx.fill();
-		  var bgUI = game.add.sprite(0, 0, bmd);
+		  return bmd;
 
-		  return bgUI;
+		}
 
+
+		static createSquare(game:Phaser.Game, width:number, height:number, color:string = "#000000"):Phaser.Sprite
+		{
+		  var bmd = Pk.PkUtils.createSquareBitmap(game, width, height, color);
+		  return game.add.sprite(0, 0, bmd);
 		}
 
 	}

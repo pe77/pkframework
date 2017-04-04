@@ -18,7 +18,7 @@ module Pk
 	}
 
 	// for remember ...    :'(     ... never forget
-	enum RenderMode
+	export enum RenderMode
     {
         AUTO = Phaser.AUTO,
         CANVAS = Phaser.CANVAS,
