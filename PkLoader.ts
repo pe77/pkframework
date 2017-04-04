@@ -15,7 +15,7 @@ module Pk
 
 	export class PkLoader extends Pk.PkState implements Pk.I.Loader{
 
-		init()
+		init()	
 		{
 
 		}

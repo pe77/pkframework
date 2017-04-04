@@ -13,6 +13,7 @@ module Pk
 		loaderLoadingBar:string			= 'assets/states/loader/images/loading-bar.png'; // loading bar
 		loaderWaitingTime:number 		= 1000; // 1 sec
 		loaderState:any	 				= Pk.PkLoader;
+		preLoaderState:any 				= Pk.PkLoaderPreLoader;
 
 	}
 

@@ -16,7 +16,7 @@ module Pk
 			PkGame.pkConfig = pkConfig;
 
 			// add states
-			this.state.add('PkLoaderPreLoader', PkLoaderPreLoader);
+			this.state.add('PkLoaderPreLoader', PkGame.pkConfig.preLoaderState);
 
 			// init loader
 			this.state.start('PkLoaderPreLoader');
@@ -27,7 +27,7 @@ module Pk
 	}
 
 
-	class PkLoaderPreLoader extends Pk.PkState {
+	export class PkLoaderPreLoader extends Pk.PkState {
 		
 		init()
 		{
