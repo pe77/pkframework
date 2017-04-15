@@ -33,7 +33,7 @@ module Pk
 		add(key:string, callBack:Function, context?:any)
 		{
 			
-			var context = context || {};
+				var context = context || {};
 		    var exist = false;
 
 		    // verifica se já não foi add
@@ -41,7 +41,7 @@ module Pk
 
 		      if(this.listeners[i].callBack.toString() === callBack.toString())
 		      {
-		        exist = true
+		        exist = true;
 		        break;
 		      }
 		    };
@@ -61,12 +61,11 @@ module Pk
 		        	target:this.target // ho dispatch the event
 		        };
 
-
 		        // se houver contexto, manda pelo contexto
 		        if(this.listeners[i].context)
 		        {
 		        	this.listeners[i].callBack.call(this.listeners[i].context, data, ...args);
-		        	return;
+		        	continue;
 		        }
 		        
 		        // dispara sem contexto mesmo
