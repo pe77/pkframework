@@ -66,7 +66,7 @@ module Pk
 		        if(this.listeners[i].context)
 		        {
 		        	this.listeners[i].callBack.call(this.listeners[i].context, data, ...args);
-		        	return;
+		        	continue;
 		        }
 		        
 		        // dispara sem contexto mesmo
