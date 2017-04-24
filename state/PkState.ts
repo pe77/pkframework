@@ -55,6 +55,16 @@ module Pk
             
         }
 
+        getLayer(layerName:string):I.LayerData
+        {
+            for (var i = 0; i < this.layers.length; i++)
+                if(this.layers[i].name == layerName)
+                    return this.layers[i];
+            //
+
+            return null;
+        }
+
         addToLayer = function(layerName:string, element:any)
         {
             var exist = false;
