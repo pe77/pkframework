@@ -29,9 +29,14 @@ module Pk
 
 		destroy()
 		{
-			for (var i = this.tweens.length - 1; i >= 0; i--) {
+			// stop all tweens
+			for (var i = this.tweens.length - 1; i >= 0; i--) 
 				this.tweens[i].stop();
-			}
+			//
+
+			// clear all events propagation many-to-many
+			this.event.clear();
+			Pk.PkEvent.ignoreContext(this);
 
 			super.destroy();
 		}

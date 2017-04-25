@@ -17,7 +17,8 @@ module Pk
 	export class PkEvent {
 
 		private static id:number = 0;
-		private id:number = ++PkEvent.id;
+		private static events:Array<Pk.PkEvent> = [];
+		id:number = ++PkEvent.id;
 
 		public name:string;
 
@@ -28,9 +29,43 @@ module Pk
 		{
 			this.target = target;
 			this.name 	= name;
+
+			Pk.PkEvent.events.push(this);
 		}
 
-		add(key:string, callBack:Function, context?:any)
+		static ignoreContext(context)
+		{
+			 for (var i = 0; i < Pk.PkEvent.events.length; i++) {
+				var event:Pk.PkEvent = Pk.PkEvent.events[i];
+				var listeners:Array<I.EventListener> = Pk.PkEvent.events[i].listeners;
+
+				var tmpListeners:Array<I.EventListener> = [];
+				for (var j = 0; j < listeners.length; j++) {
+					var listener:I.EventListener = listeners[j];
+
+					
+					if(!listener.context.event)
+					{
+						tmpListeners.push(listener);
+						continue;
+					}
+
+					if(listener.context.event.id !== context.event.id)
+					{
+						tmpListeners.push(listener);
+					}else{
+						// console.debug('ignore context:', context)
+					}
+				}
+
+				Pk.PkEvent.events[i].listeners = tmpListeners;
+
+
+
+			 }
+		}
+
+		add(key:string, callBack:Function, context:any)
 		{
 			
 				var context = context || {};
@@ -39,7 +74,11 @@ module Pk
 		    // verifica se já não foi add
 		    for (var i = 0; i < this.listeners.length; i++) {
 
-		      if(this.listeners[i].callBack.toString() === callBack.toString())
+		      if(
+						this.listeners[i].callBack.toString() === callBack.toString()
+						&&
+						this.listeners[i].context === context
+						)
 		      {
 		        exist = true;
 		        break;
@@ -51,8 +90,34 @@ module Pk
 		    //
 		}
 
+		clear(key?:string)
+		{
+			// clear all
+			if(!key)
+			{
+				this.listeners = [];
+			}else{ // clear only key
+				var tmpListeners:Array<I.EventListener> = [];
+				for (var i = 0; i < this.listeners.length; i++)
+		    {
+		      if(key != this.listeners[i].key)
+		      {
+						tmpListeners.push(this.listeners[i]);
+					}
+				}
+
+				this.listeners = tmpListeners;
+				return;
+			}
+		}
+
 		dispatch(key:string, ...args:any[])
 		{
+				if(this.target.name == 'Lizzard')
+				{
+					// console.debug('dispath lizzard event:', key)
+				}
+
 		    for (var i = 0; i < this.listeners.length; i++)
 		    {
 		      if(key == this.listeners[i].key)
