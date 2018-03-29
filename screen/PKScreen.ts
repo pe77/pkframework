@@ -32,6 +32,8 @@ module Pk
             }
 
             this.add(this.bg);
+
+            this.close();
         }
 
         open()
