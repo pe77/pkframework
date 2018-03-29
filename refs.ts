@@ -10,4 +10,6 @@
 
 /// <reference path='element/PkElement.ts' />
 
+/// <reference path='screen/PkScreen.ts' />
+
 /// <reference path='utils/PkUtils.ts' />

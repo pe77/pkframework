@@ -2,7 +2,7 @@ module Pk
 {
 	export class PkConfig {
 		
-		canvasSize	:[number, number] 	= [800, 600]; // width, height
+		canvasSize	:[any, any] 	= [800, 600]; // width, height
 		canvasId	:string 			= 'game';
 
 		renderMode	:number 			= RenderMode.AUTO; 

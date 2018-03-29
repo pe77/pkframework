@@ -4,7 +4,7 @@ module Pk
 {
 	export class PkElement extends Phaser.Group {
 
-
+ 
 		private static id:number = 0;
 		private id:number = ++PkElement.id;
 
@@ -18,7 +18,12 @@ module Pk
 			super(game);
 
 			// inicia gerenciador de eventos
-  			this.event = new PkEvent('element-event-'+this.id, this);
+			this.event = new PkEvent('element-event-'+this.id, this);  
+		}
+
+		getId()
+		{
+			return this.id;
 		}
 
 		addTween(displayObject:any)
