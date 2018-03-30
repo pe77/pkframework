@@ -19,7 +19,6 @@ module Pk
     export class PkState extends Phaser.State {
         
         transition:Pk.PkTransition;
-
         layers:Array<I.LayerData> = [];
 
         getGame():Pk.PkGame

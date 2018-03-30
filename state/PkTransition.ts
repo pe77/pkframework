@@ -21,7 +21,7 @@ module Pk
 
 		constructor(state:Pk.PkState)
 		{
-			this.game = state.game;
+			this.game = <Pk.PkGame>state.game;
 			this.state = state;
 		}
 
