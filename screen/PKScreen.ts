@@ -1,49 +1,47 @@
-/// <reference path='../vendor/phaser/phaser.d.ts' />
+import { PkElement } from "../element/PkElement";
 
-module Pk
-{
-	export class PkScreen extends Pk.PkElement {
 
-        bg:Phaser.Sprite;
-        bgAlpha:number = 0.75;
+export class PkScreen extends PkElement {
 
-        blockOverInput:boolean = true;
+    bg:Phaser.Sprite;
+    bgAlpha:number = 0.75;
 
-		constructor(game)
-		{
-			super(game);
-		}
+    blockOverInput:boolean = true;
 
-        create()
+    constructor(game)
+    {
+        super(game);
+    }
+
+    create()
+    {
+        this.createBg();
+    }
+
+    protected createBg()
+    {
+        // create a generic background 
+        this.bg = PkUtils.createSquare(this.game, this.game.world.width, this.game.world.height, "#000");
+        this.bg.alpha = this.bgAlpha;
+
+        if(this.blockOverInput)
         {
-            this.createBg();
+            this.bg.inputEnabled = true;
+            // this.bg.input.priorityID = Number.POSITIVE_INFINITY;
         }
 
-        protected createBg()
-        {
-            // create a generic background 
-            this.bg = Pk.PkUtils.createSquare(this.game, this.game.world.width, this.game.world.height, "#000");
-            this.bg.alpha = this.bgAlpha;
+        this.add(this.bg);
 
-            if(this.blockOverInput)
-            {
-                this.bg.inputEnabled = true;
-                // this.bg.input.priorityID = Number.POSITIVE_INFINITY;
-            }
+        this.close();
+    }
 
-            this.add(this.bg);
+    open()
+    {
+        this.visible = true;
+    }
 
-            this.close();
-        }
-
-        open()
-        {
-            this.visible = true;
-        }
-
-        close()
-        {
-            this.visible = false;
-        }
-	}
+    close()
+    {
+        this.visible = false;
+    }
 }

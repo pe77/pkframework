@@ -1,52 +1,67 @@
-/// <reference path='vendor/phaser/phaser.d.ts' />
-/// <reference path='state/PkState.ts' />
+import { PkConfig } from "./PkConfig";
+import * as $ from 'jquery';
+import { PkLoader } from "./PkLoader";
+import { PkScene } from "./scene/PKScene";
 
-module Pk
-{
-	export class PkGame extends Phaser.Game	{
 
-		static pkConfig:PkConfig;
+export class PkGame extends Phaser.Game	{
 
-		static game:PkGame;
+	static pkConfig:PkConfig;
 
-		constructor(pkConfig:PkConfig = new PkConfig())
-		{
-			super(pkConfig.canvasSize[0], pkConfig.canvasSize[1], pkConfig.renderMode, pkConfig.canvasId);
+	static game:PkGame;
+ 
+	constructor(pkConfig:PkConfig = new PkConfig())
+	{
+		var config:GameConfig = {
+			type: Phaser.AUTO,
+			width: pkConfig.canvasSize[0],
+			height: pkConfig.canvasSize[1],
+			parent:pkConfig.canvasContainerId
+		};
 
-			PkGame.pkConfig = pkConfig;
+		super(config);
 
-			// add states
-			this.state.add('PkLoaderPreLoader', PkGame.pkConfig.preLoaderState);
+		PkGame.pkConfig = pkConfig;
 
-			// init loader
-			this.state.start('PkLoaderPreLoader');
+		// add states
+		this.scene.add('PkLoaderPreLoader', PkGame.pkConfig.preLoaderState, true);
 
-			PkGame.game = this;
-		}
+		PkGame.game = this;
+
+		// console.log('PK Game init')
+	}
+
+	protected preload()
+	{
 
 	}
 
+	protected create()
+	{
+	}
 
-	export class PkLoaderPreLoader extends Pk.PkState {
+}
+
+export class PkLoaderPreLoader extends PkScene {
 		
-		init()
-		{
-			// add loader screen
-			this.game.state.add('PkLoader', PkGame.pkConfig.loaderState);
-		}
-
-
-		preload()
-		{
-			// load loadingbar sprite
-			this.load.image('pk-loading-bar', PkGame.pkConfig.loaderLoadingBar);
-		}
-
-		create()
-		{
-			// change to preloader screen*
-			this.game.state.start('PkLoader');
-		}
+	init()
+	{
+		// add loader screen
+		this.game.scene.add('PkLoader', PkGame.pkConfig.loaderState);
 	}
 
+
+	preload()
+	{
+		// load loadingbar sprite
+		if(PkGame.pkConfig.loaderLoadingBar != '')
+			this.load.image('pk-loading-bar', PkGame.pkConfig.loaderLoadingBar);
+		//
+	}
+
+	create()
+	{
+		// change to preloader screen*
+		this.game.scene.start('PkLoader')
+	}
 }

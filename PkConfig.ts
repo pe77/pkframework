@@ -1,28 +1,17 @@
-module Pk
-{
-	export class PkConfig {
-		
-		canvasSize	:[any, any] 	= [800, 600]; // width, height
-		canvasId	:string 			= 'game';
+import { PkLoader } from "./PkLoader";
+import { PkLoaderPreLoader } from "./PkGame";
 
-		renderMode	:number 			= RenderMode.AUTO; 
+export class PkConfig {
+	
+	canvasSize			:[number|string, number|string] 		= [1024, 768]; // width, height
+	canvasContainerId	:string 								= 'game-container';
 
-		initialState:string 			= ''; // initial state after loadscreen
+	initialState:string 			= ''; // initial state after loadscreen
 
-		// loading settings
-		loaderLoadingBar:string			= 'assets/states/loader/images/loading-bar.png'; // loading bar
-		loaderWaitingTime:number 		= 1000; // 1 sec
-		loaderState:any	 				= Pk.PkLoader;
-		preLoaderState:any 				= Pk.PkLoaderPreLoader;
+	// loading settings
+	loaderLoadingBar:string			= ''; // loading bar
+	loaderWaitingTime:number 		= 1000; // 1 sec
+	loaderState:any	 				= PkLoader;
+	preLoaderState:any 				= PkLoaderPreLoader;
 
-	}
-
-	// for remember ...    :'(     ... never forget
-	export enum RenderMode
-    {
-        AUTO = Phaser.AUTO,
-        CANVAS = Phaser.CANVAS,
-        WEBGL = Phaser.WEBGL,
-        HEADLESS = Phaser.HEADLESS
-    }
 }

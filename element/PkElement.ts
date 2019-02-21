@@ -1,49 +1,34 @@
-/// <reference path='../vendor/phaser/phaser.d.ts' />
+import { PkEvent } from "../event/PkEvent";
 
-module Pk
-{
-	export class PkElement extends Phaser.Group {
 
- 
-		private static id:number = 0;
-		private id:number = ++PkElement.id;
+export class PkElement {
 
-		protected tweens:Array<Phaser.Tween> = [];
 
-		public name = "PkElement-"+ this.id;
-		public event:PkEvent;
+	private static id:number = 0;
+	private id:number = ++PkElement.id;
 
-		constructor(game)
-		{
-			super(game);
+	public name = "PkElement-"+ this.id;
+	public event:PkEvent;
 
-			// inicia gerenciador de eventos
-			this.event = new PkEvent('element-event-'+this.id, this);  
-		}
+	constructor(game)
+	{
 
-		getId()
-		{
-			return this.id;
-		}
+		// inicia gerenciador de eventos
+		this.event = new PkEvent('element-event-'+this.id, this);  
+	}
 
-		addTween(displayObject:any)
-		{
-			this.tweens.push(this.game.add.tween(displayObject));
-			return this.tweens[this.tweens.length-1];
-		}
+	getId()
+	{
+		return this.id;
+	}
 
-		destroy()
-		{
-			// stop all tweens
-			for (var i = this.tweens.length - 1; i >= 0; i--) 
-				this.tweens[i].stop();
-			//
+	destroy()
+	{
 
-			// clear all events propagation many-to-many
-			this.event.clear();
-			Pk.PkEvent.ignoreContext(this);
+		// clear all events propagation many-to-many
+		this.event.clear();
+		PkEvent.ignoreContext(this);
 
-			super.destroy();
-		}
+		// super.destroy();
 	}
 }
