@@ -36,18 +36,23 @@ export class PkTransition  {
 	// This is called when the state preload has finished and creation begins
 	protected endStartAnimation(e)
 	{
+		console.log('111')
 		// remove current scene
 		// this.scene.shutdown();
 		this.scene.scene.stop();
 		
 
+		console.log('222')
 		// get next
 		var nextScene:PkScene = <PkScene>this.game.scene.getScene(this.to);
 		
+		console.log('333')
 		// change to next scene
 		nextScene.events.on('transitionstart', ()=>{
 			console.log('=== -scene render')
 		});
+
+		console.log('444')
 		nextScene.scene.start();
 		nextScene.initData = this.params;
 

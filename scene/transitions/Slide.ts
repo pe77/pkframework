@@ -17,7 +17,6 @@ export class PkTransitionSlide implements I.TransitionAnimation {
 
     start()
     {
-        console.log('slide start')
         // create bg
         var points:Array<number> = [
             (this.scene.game.canvas.width / 2) * (-1), 0, // 1
@@ -46,7 +45,6 @@ export class PkTransitionSlide implements I.TransitionAnimation {
 
     end()
     { 
-        console.log('slide end')
         this.scene.scene.setVisible(false);
 
         var points:Array<number> = [
