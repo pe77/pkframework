@@ -38,7 +38,7 @@ export class PkTransition  {
 	{
 		console.log('111')
 		// remove current scene
-		// this.scene.shutdown();
+		this.scene.shutdown();
 		this.scene.scene.stop();
 		
 
