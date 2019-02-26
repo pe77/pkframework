@@ -1,4 +1,6 @@
 import { PkGame } from "../PkGame";
+import { PkTransition } from "./PkTransition";
+import { PkElement } from "../element/PkElement";
 
 export module I
 {
@@ -6,19 +8,33 @@ export module I
 
         name:string;
         total:number;
-        group:Phaser.GameObjects.Group;
+        group:Phaser.GameObjects.Container;
     }
 }
 
 
 export class PkScene extends Phaser.Scene {
     
-    // transition:Pk.PkTransition;
+    transition:PkTransition;
     layers:Array<I.LayerData> = [];
+    initData:any[];
 
     constructor(config:Phaser.Scenes.Settings.Config = {})
     {
         super(config)
+        
+    }
+
+    init()
+    {
+        console.log('SCENE INIT')
+        this.transition = new PkTransition(this);
+    }
+
+    preload()
+    {
+        console.log('scene preload')
+        // this.transition.transitionAnimation.end();
     }
 
     getGame():PkGame
@@ -47,7 +63,7 @@ export class PkScene extends Phaser.Scene {
             this.layers.push({
                 name:layerName,
                 total:0,
-                group:this.game.add.group()
+                group: (new PkElement(this))// this.game.add.group()
             });    
         }
         
@@ -84,24 +100,42 @@ export class PkScene extends Phaser.Scene {
 
         // add element to layer
         this.layers[i].group.add(element);
-        this.layers[i].total = this.layers[i].group.total;
 
         // order layers
         for (var i = 0; i < this.layers.length; i++)
-            this.game.world.bringToTop(this.layers[i].group)
+            this.children.bringToTop(this.layers[i].group)
         //
         
+        this.bringLayerToTop('transition'); // transition layer always on top
     }
 
-    init(...args:any[])
+    bringLayerToTop(layerName:string)
     {
-        // this.transition = new Pk.PkTransition(this);
+        for (var i = 0; i < this.layers.length; i++)
+        {
+            if(this.layers[i].name == layerName)
+            {
+                this.children.bringToTop(this.layers[i].group)
+                // console.log('bring ' + this.layers[i].name + ' to top')
+            }
+                
+        }
+            
+        //
     }
-
 
     create()
     {
+        this.addLayer('transition')
+        this.transition.transitionAnimation.end();
         // console.log('PkScene create');
+
+        // this.scene.
+    }
+
+    shutdown()
+    {
+        
     }
 
 }

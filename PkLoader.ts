@@ -30,11 +30,14 @@ export class PkLoader extends PkScene implements I.Loader
     {
         setTimeout(() => {
 
-            
             // if initial state set, load
             if(PkGame.pkConfig.initialState != '')
+            {
                 this.game.scene.start(PkGame.pkConfig.initialState);
-            //
+            }
+
+            // remove loader screen
+            this.game.scene.remove('PkLoader')
 
         }, PkGame.pkConfig.loaderWaitingTime);
     }

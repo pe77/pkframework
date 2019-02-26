@@ -1,9 +1,10 @@
 import { PkElement } from "../element/PkElement";
+import { PkUtils } from "../utils/PkUtils";
 
 
 export class PkScreen extends PkElement {
 
-    bg:Phaser.Sprite;
+    bg:Phaser.GameObjects.Sprite;
     bgAlpha:number = 0.75;
 
     blockOverInput:boolean = true;
@@ -11,6 +12,7 @@ export class PkScreen extends PkElement {
     constructor(game)
     {
         super(game);
+        
     }
 
     create()
@@ -21,12 +23,12 @@ export class PkScreen extends PkElement {
     protected createBg()
     {
         // create a generic background 
-        this.bg = PkUtils.createSquare(this.game, this.game.world.width, this.game.world.height, "#000");
+        this.bg = PkUtils.createSquare(this.scene, this.scene.game.canvas.width, this.scene.game.canvas.height, 0x000000);
         this.bg.alpha = this.bgAlpha;
 
         if(this.blockOverInput)
         {
-            this.bg.inputEnabled = true;
+            this.bg.input.enabled = true;
             // this.bg.input.priorityID = Number.POSITIVE_INFINITY;
         }
 
@@ -43,5 +45,7 @@ export class PkScreen extends PkElement {
     close()
     {
         this.visible = false;
+        
+        
     }
 }

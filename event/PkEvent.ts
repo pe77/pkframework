@@ -13,7 +13,7 @@ export module I
 export class PkEvent {
 
 	private static id:number = 0;
-	private static events:Array<Pk.PkEvent> = [];
+	private static events:Array<PkEvent> = [];
 	id:number = ++PkEvent.id;
 
 	public name:string;
@@ -26,14 +26,14 @@ export class PkEvent {
 		this.target = target;
 		this.name 	= name;
 
-		Pk.PkEvent.events.push(this);
+		PkEvent.events.push(this);
 	}
 
 	static ignoreContext(context)
 	{
-			for (var i = 0; i < Pk.PkEvent.events.length; i++) {
-			var event:Pk.PkEvent = Pk.PkEvent.events[i];
-			var listeners:Array<I.EventListener> = Pk.PkEvent.events[i].listeners;
+		for (var i = 0; i < PkEvent.events.length; i++) {
+			var event:PkEvent = PkEvent.events[i];
+			var listeners:Array<I.EventListener> = PkEvent.events[i].listeners;
 
 			var tmpListeners:Array<I.EventListener> = [];
 			for (var j = 0; j < listeners.length; j++) {
@@ -54,11 +54,8 @@ export class PkEvent {
 				}
 			}
 
-			Pk.PkEvent.events[i].listeners = tmpListeners;
-
-
-
-			}
+			PkEvent.events[i].listeners = tmpListeners;
+		}
 	}
 
 	add(key:string, callBack:Function, context:any)
@@ -109,31 +106,26 @@ export class PkEvent {
 
 	dispatch(key:string, ...args:any[])
 	{
-			if(this.target.name == 'Lizzard')
+		for (var i = 0; i < this.listeners.length; i++)
+		{
+			if(key == this.listeners[i].key)
 			{
-				// console.debug('dispath lizzard event:', key)
-			}
+				var data = {
+					target:this.target // ho dispatch the event
+				};
 
-			for (var i = 0; i < this.listeners.length; i++)
-			{
-				if(key == this.listeners[i].key)
+				// se houver contexto, manda pelo contexto
+				if(this.listeners[i].context)
 				{
-					var data = {
-						target:this.target // ho dispatch the event
-					};
-
-					// se houver contexto, manda pelo contexto
-					if(this.listeners[i].context)
-					{
-						this.listeners[i].callBack.call(this.listeners[i].context, data, ...args);
-						continue;
-					}
-					
-					// dispara sem contexto mesmo
-					this.listeners[i].callBack(data, ...args);
-					
+					this.listeners[i].callBack.call(this.listeners[i].context, data, ...args);
+					continue;
 				}
+				
+				// dispara sem contexto mesmo
+				this.listeners[i].callBack(data, ...args);
+				
 			}
+		}
 	}
 
 }

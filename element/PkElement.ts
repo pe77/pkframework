@@ -1,20 +1,26 @@
 import { PkEvent } from "../event/PkEvent";
+import { PkScene } from "../scene/PKScene";
 
 
-export class PkElement {
+export class PkElement extends Phaser.GameObjects.Container {
 
 
 	private static id:number = 0;
-	private id:number = ++PkElement.id;
+	private id:number = 0;
 
 	public name = "PkElement-"+ this.id;
 	public event:PkEvent;
 
-	constructor(game)
+	constructor(scene:PkScene)
 	{
+		super(scene, 0, 0);
 
 		// inicia gerenciador de eventos
 		this.event = new PkEvent('element-event-'+this.id, this);  
+
+		scene.add.existing(this);
+
+		this.id = ++PkElement.id;
 	}
 
 	getId()
@@ -24,11 +30,10 @@ export class PkElement {
 
 	destroy()
 	{
-
 		// clear all events propagation many-to-many
 		this.event.clear();
 		PkEvent.ignoreContext(this);
 
-		// super.destroy();
+		super.destroy();
 	}
 }
