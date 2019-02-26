@@ -27,14 +27,12 @@ export class PkScene extends Phaser.Scene {
 
     init()
     {
-        console.log('SCENE INIT')
         this.transition = new PkTransition(this);
     }
 
     preload()
     {
-        console.log('scene preload')
-        // this.transition.transitionAnimation.end();
+        this.transition.transitionAnimation.end();
     }
 
     getGame():PkGame
@@ -55,17 +53,19 @@ export class PkScene extends Phaser.Scene {
                 break;
             }
         };
+
+        if(exist)
+            this.layers.splice(i, 1);
+        //
         
 
-        if(!exist)
-        {
-            // add to layer
-            this.layers.push({
-                name:layerName,
-                total:0,
-                group: (new PkElement(this))// this.game.add.group()
-            });    
-        }
+        // add to layer
+        this.layers.push({
+            name:layerName,
+            total:0,
+            group: (new PkElement(this))// this.game.add.group()
+        });    
+        
         
     }
 
@@ -105,8 +105,6 @@ export class PkScene extends Phaser.Scene {
         for (var i = 0; i < this.layers.length; i++)
             this.children.bringToTop(this.layers[i].group)
         //
-        
-        this.bringLayerToTop('transition'); // transition layer always on top
     }
 
     bringLayerToTop(layerName:string)
@@ -126,11 +124,7 @@ export class PkScene extends Phaser.Scene {
 
     create()
     {
-        this.addLayer('transition')
-        this.transition.transitionAnimation.end();
-        // console.log('PkScene create');
-
-        // this.scene.
+        
     }
 
     shutdown()
