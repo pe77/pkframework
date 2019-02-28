@@ -11,9 +11,13 @@ export class PkElement extends Phaser.GameObjects.Container {
 	public name = "PkElement-"+ this.id;
 	public event:PkEvent;
 
+	public pkScene:PkScene;
+
 	constructor(scene:PkScene)
 	{
 		super(scene, 0, 0);
+
+		this.pkScene = scene;
 
 		// inicia gerenciador de eventos
 		this.event = new PkEvent('element-event-'+this.id, this);  
